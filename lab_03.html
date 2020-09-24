@@ -1,0 +1,116 @@
+<HTML>
+
+<BODY>
+
+
+<canvas id="lab03" width="2000" height="2000">
+</canvas>
+
+
+<script>
+			
+        var canvas = document.getElementById("lab03");
+
+        var ctx = canvas.getContext("2d");
+
+		
+        function one(ctx, x0, y0, x1, y1) {
+               
+			let d_x = Math.abs(x1 - x0);
+			let d_y = Math.abs(y1 - y0);
+			
+			let error = 0;
+			let d = (d_y + 1);
+			let y = y0;
+			let diry = y1 - y0;
+			 
+			if (diry > 0) {
+					diry = 1;
+			}
+			if (diry < 0) {
+					diry = -1;
+			}
+				
+			for(let x = x0; x < x1; x++) {
+					ctx.fillRect(x,y,1,1);
+					error = error + d;
+					if (error >= (d_x + 1)) {
+							y = y + diry;
+							error = error - (d_x + 1);
+					}
+			}
+        };
+		
+		function two(ctx, x0, y0, x1, y1) {
+               
+			let d_x = Math.abs(x1 - x0);
+			let d_y = Math.abs(y1 - y0);
+			let error = 0;
+			let d = (d_x + 1);
+			let x = x0;
+			let dirx = x1 - x0;
+			 
+			if (dirx > 0) {
+				dirx = 1;
+			}
+			if (dirx < 0) {
+				dirx = -1;
+			}
+			 for(let y = y0;y < y1; y++) {
+					ctx.fillRect(x,y,1,1);
+					error = error + d;
+					if (error >= (d_y + 1)) {
+							x = x + dirx;
+							error = error - (d_y + 1);
+					}
+			}
+        };
+		
+		function line(ctx,x0,y0,x1,y1) {
+
+			var k = (y1-y0)/(x1-x0);
+			
+			if ((k < -1) || (k > 1)) {
+				if (y1 < y0) {
+					two(ctx,x1,y1,x0,y0);
+				}	
+				else {
+					two(ctx,x0,y0,x1,y1);
+				}
+			}
+			if ((k <= 1) && (k >= -1)) {
+				if (x1 < x0) {
+					one(ctx,x1,y1,x0,y0);
+				}	
+				else {
+					one(ctx,x0,y0,x1,y1);
+				}
+			}
+		};
+
+
+
+        var flag = 0;
+        canvas.addEventListener("click", function(event){
+            
+			if (flag) {
+				x1 = event.offsetX;
+                y1 = event.offsetY;
+
+                line(ctx, x0, y0, x1, y1);
+
+                flag = 0;
+            } else {
+                x0 = event.offsetX;
+                y0 = event.offsetY;
+                flag = 1;
+            }
+        });
+
+</script>
+
+
+
+</BODY>
+
+</HTML>
